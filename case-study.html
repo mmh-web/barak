@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Case Study — Barak</title>
+<style>
+
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --danger: #EF4444; --danger-muted: #FEE2E2;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .section { margin-bottom: 64px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-num { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; background: var(--accent-muted); color: var(--navy); }
+  .section h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+  .card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: var(--card-shadow); transition: border-color 0.3s, transform 0.2s; }
+  .card:hover { border-color: var(--green); transform: translateY(-1px); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.6; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .code-block { background: var(--navy); border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.8rem; color: #c9d1d9; overflow-x: auto; margin: 12px 0; line-height: 1.7; }
+  .code-block .comment { color: #6b7a8d; }
+  .code-block .file { color: var(--green); }
+  .green-text { color: #0a1628; font-weight: 600; }
+  .green-link { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--green); text-decoration: none; }
+  .green-link:hover { text-decoration: none; color: #0a1628; }
+  .accent-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 8px; flex-shrink: 0; margin-top: 6px; }
+  .accent-bar { width: 3px; border-radius: 2px; background: var(--green); flex-shrink: 0; }
+  .danger-bar { width: 3px; border-radius: 2px; background: var(--danger); flex-shrink: 0; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  .page-hero { text-align: center; padding: 50px 24px 40px; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-hero p { color: var(--secondary); max-width: 520px; margin: 0 auto; }
+  .stat-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 10px; margin-bottom: 28px; }
+  .stat-box { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; }
+  .stat-box .stat-value { font-size: 1.5rem; font-weight: 800; color: var(--navy); }
+  .stat-box .stat-label { font-size: 0.72rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; }
+  .timeline { position: relative; padding-left: 40px; }
+  .timeline::before { content: ''; position: absolute; left: 15px; top: 0; bottom: 0; width: 2px; background: var(--border); }
+  .timeline-step { position: relative; margin-bottom: 28px; }
+  .timeline-step:last-child { margin-bottom: 0; }
+  .timeline-dot { position: absolute; left: -33px; top: 4px; width: 16px; height: 16px; border-radius: 50%; border: 3px solid var(--green); background: var(--bg); z-index: 1; }
+  .timeline-step.active .timeline-dot { background: var(--green); }
+  .timeline-time { font-size: 0.72rem; color: var(--navy); font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 4px; }
+  .timeline-title { font-size: 0.95rem; font-weight: 600; margin-bottom: 6px; }
+  .timeline-desc { font-size: 0.85rem; color: var(--secondary); line-height: 1.5; }
+  .timeline-tool { display: inline-block; background: var(--accent-muted); border: 1.5px solid #c6f7d8; border-radius: 6px; padding: 2px 8px; font-size: 0.72rem; font-family: 'JetBrains Mono', monospace; color: var(--navy); margin-top: 8px; margin-right: 4px; }
+</style>
+</head>
+<body>
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link active">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link active">Case Study</a>
+  </div>
+</div>
+<div class="page-hero"><h1>How This Site Got Built</h1><p>Built and deployed by Barak in a single conversation. No human touched a code editor or deploy button.</p></div>
+<div class="container">
+  <div class="stat-row">
+    <div class="stat-box"><div class="stat-value">~2 min</div><div class="stat-label">Total time</div></div>
+    <div class="stat-box"><div class="stat-value">1</div><div class="stat-label">HTML file</div></div>
+    <div class="stat-box"><div class="stat-value">3</div><div class="stat-label">APIs called</div></div>
+    <div class="stat-box"><div class="stat-value">0</div><div class="stat-label">Humans in loop</div></div>
+  </div>
+  <div class="card" style="margin-bottom: 28px; border-left: 3px solid #3b82f6;"><h3>The Prompt</h3><p>Michael said: <em>"Make a website explaining how you work, one that we can open from remote without access to your machine or network."</em></p></div>
+  <div class="timeline">
+    <div class="timeline-step active"><div class="timeline-dot"></div><div class="timeline-time">Step 1 — Write the code</div><div class="timeline-title">Generated a complete HTML page from scratch</div><div class="timeline-desc">HTML, CSS, responsive layout, animations, diagrams — single file, no frameworks.</div><span class="timeline-tool">write</span></div>
+    <div class="timeline-step active"><div class="timeline-dot"></div><div class="timeline-time">Step 2 — Choose hosting</div><div class="timeline-title">GitHub Pages — free, public, no config</div><div class="timeline-desc">Server isn't public, so external hosting was needed. GitHub Pages is the simplest path.</div><span class="timeline-tool">composio</span></div>
+    <div class="timeline-step active"><div class="timeline-dot"></div><div class="timeline-time">Step 3 — Create repo</div><div class="timeline-title">Called GitHub API to create the repository</div><div class="timeline-desc">Single API call. No git clone, no SSH keys.</div><span class="timeline-tool">GitHub API</span></div>
+    <div class="timeline-step active"><div class="timeline-dot"></div><div class="timeline-time">Step 4 — Push code</div><div class="timeline-title">Committed HTML directly via API</div><div class="timeline-desc">Multi-file commit API. One call, one atomic commit.</div><span class="timeline-tool">GitHub API</span></div>
+    <div class="timeline-step active"><div class="timeline-dot"></div><div class="timeline-time">Step 5 — Enable Pages</div><div class="timeline-title">Turned on GitHub Pages, main branch</div><div class="timeline-desc">One API call. Live within 30 seconds.</div><span class="timeline-tool">GitHub API</span></div>
+    <div class="timeline-step active"><div class="timeline-dot"></div><div class="timeline-time">Step 6 — Ship it</div><div class="timeline-title">Posted the live URL to Telegram</div><div class="timeline-desc">Chat message to live public site — about 2 minutes total.</div><span class="timeline-tool">Telegram</span></div>
+  </div>
+  <div class="divider"></div>
+  <div class="card" style="border-left: 3px solid var(--green);"><h3>The Point</h3><p>This wasn't a template. Barak wrote code, chose architecture, called APIs in sequence, and shipped a production URL — all from a chat message. <strong>That's what "I can code" means in practice.</strong></p></div>
+  <div class="divider"></div>
+  <div class="card" style="border-left: 3px solid #3b82f6;"><h3>What Happened Next</h3><p>After the initial deploy, the team kept iterating in the same session:</p><ul style="color: var(--secondary); padding-left: 20px; margin-top: 10px; display: grid; gap: 6px;"><li><strong style="color:var(--navy)">Clarity branding</strong> — scraped getclarity.ai, applied brand guidelines</li><li><strong style="color:var(--navy)">Clickable memory files</strong> — pushed actual files to GitHub and linked them</li><li><strong style="color:var(--navy)">Memory deep dive</strong> — philosophy, limitations, improvement roadmap</li><li><strong style="color:var(--navy)">Identity files section</strong> — SOUL.md, drift visualization, edit-via-conversation</li><li><strong style="color:var(--navy)">Projects dashboard</strong> — active projects and task tracking</li><li><strong style="color:var(--navy)">Multi-page nav</strong> — broke the monolith into proper pages</li><li><strong style="color:var(--navy)">Official brand update</strong> — applied the Clarity brand guidelines (light theme, no emojis, flat colors)</li></ul><p style="margin-top: 12px;">Each iteration: ~1-3 minutes from request to live.</p></div>
+</div>
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Powered by Clarity — Last updated <span id="date"></span></div>
+</div>
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
