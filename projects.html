@@ -1,0 +1,552 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Projects & Tasks — Barak</title>
+<style>
+
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --danger: #EF4444; --danger-muted: #FEE2E2;
+    --warning: #F59E0B; --warning-muted: #FFF7ED; --warning-border: #fed7aa;
+    --info: #3B82F6; --info-muted: #EFF6FF; --info-border: #bfdbfe;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .section { margin-bottom: 56px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-num { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; background: var(--accent-muted); color: var(--navy); }
+  .section h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .green-link { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--green); text-decoration: none; }
+  .green-link:hover { text-decoration: none; color: #0a1628; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  /* Hero */
+  .page-hero { text-align: center; padding: 50px 24px 40px; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-hero p { color: var(--secondary); max-width: 560px; margin: 0 auto; font-size: 0.95rem; }
+
+  /* Status badges */
+  .status-badge { font-size: 0.72rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; }
+  .status-active { background: var(--accent-muted); color: var(--navy); border: 1.5px solid #c6f7d8; }
+  .status-active .pulse { width: 6px; height: 6px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+  .status-planned { background: var(--info-muted); color: #1e40af; border: 1.5px solid var(--info-border); }
+  .status-phase0 { background: var(--warning-muted); color: #9a3412; border: 1.5px solid var(--warning-border); }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
+
+  /* Project cards */
+  .project-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 0; margin-bottom: 20px; box-shadow: var(--card-shadow); transition: border-color 0.3s; overflow: hidden; }
+  .project-card:hover { border-color: var(--green); }
+  .project-card-top { padding: 28px 28px 0; }
+  .project-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 10px; }
+  .project-title { font-size: 1.1rem; font-weight: 700; }
+  .project-subtitle { font-size: 0.85rem; color: var(--secondary); margin-bottom: 20px; line-height: 1.5; }
+
+  /* Activity timeline */
+  .timeline { padding: 0 28px 20px; }
+  .timeline-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 12px; }
+  .timeline-item { display: flex; align-items: flex-start; gap: 12px; position: relative; padding-bottom: 14px; }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-track { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 12px; padding-top: 2px; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .timeline-dot.muted { background: var(--border); }
+  .timeline-line { width: 1.5px; background: var(--border); flex-grow: 1; min-height: 14px; margin-top: 4px; }
+  .timeline-item:last-child .timeline-line { display: none; }
+  .timeline-content { flex: 1; min-width: 0; }
+  .timeline-date { font-size: 0.72rem; color: var(--secondary); font-weight: 600; }
+  .timeline-text { font-size: 0.83rem; color: var(--navy); line-height: 1.45; }
+
+  /* Project sections */
+  .project-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1.5px solid var(--border); }
+  .project-sections.single { grid-template-columns: 1fr; }
+  .project-section { padding: 20px 28px; }
+  .project-section + .project-section { border-left: 1.5px solid var(--border); }
+  .project-section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 8px; }
+  .project-section-text { font-size: 0.83rem; color: var(--navy); line-height: 1.5; }
+  .project-section-text.blocked { color: #9a3412; }
+  @media (max-width: 600px) {
+    .project-sections { grid-template-columns: 1fr; }
+    .project-section + .project-section { border-left: none; border-top: 1.5px solid var(--border); }
+  }
+
+  /* Spec links */
+  .spec-links { display: flex; flex-wrap: wrap; gap: 8px; padding: 16px 28px; border-top: 1.5px solid var(--border); }
+  .spec-link { display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px; padding: 6px 14px; text-decoration: none; color: var(--navy); transition: border-color 0.2s; font-size: 0.78rem; font-weight: 600; }
+  .spec-link:hover { border-color: var(--green); text-decoration: none; }
+  .spec-link-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  /* Project footer meta */
+  .project-footer { display: flex; gap: 20px; padding: 14px 28px; border-top: 1.5px solid var(--border); background: var(--bg); flex-wrap: wrap; }
+  .project-meta-item { font-size: 0.75rem; color: var(--secondary); }
+  .project-meta-item strong { color: var(--navy); }
+
+  /* Planned card (dimmed) */
+  .project-card.planned { opacity: 0.65; }
+  .project-card.planned:hover { opacity: 0.85; }
+
+  /* Task groups */
+  .task-group { margin-bottom: 32px; }
+  .task-group-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+  .task-group-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+  .task-group-dot.urgent { background: #F59E0B; }
+  .task-group-dot.planned { background: var(--info); }
+  .task-group-dot.done { background: var(--green); }
+  .task-group-title { font-size: 0.95rem; font-weight: 700; }
+  .task-group-count { font-size: 0.72rem; color: var(--secondary); font-weight: 600; background: var(--bg); border: 1.5px solid var(--border); padding: 2px 10px; border-radius: 12px; }
+
+  /* Task items */
+  .task-item { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 18px 20px; margin-bottom: 10px; box-shadow: var(--card-shadow); transition: border-color 0.3s; }
+  .task-item:hover { border-color: var(--green); }
+  .task-item.urgent { border-left: 3px solid #F59E0B; }
+  .task-item-top { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; flex-wrap: wrap; gap: 8px; }
+  .task-title { font-size: 0.88rem; font-weight: 700; }
+  .task-owner { font-size: 0.72rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: var(--bg); color: var(--secondary); border: 1px solid var(--border); }
+  .task-desc { font-size: 0.82rem; color: var(--secondary); line-height: 1.5; }
+
+  /* Completed items */
+  .completed-list { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 20px 24px; box-shadow: var(--card-shadow); }
+  .completed-item { display: flex; align-items: center; gap: 10px; padding: 8px 0; font-size: 0.83rem; color: var(--secondary); border-bottom: 1px solid var(--border); }
+  .completed-item:last-child { border-bottom: none; }
+  .completed-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .completed-date { margin-left: auto; font-size: 0.72rem; color: var(--secondary); white-space: nowrap; flex-shrink: 0; }
+
+  /* How it works card */
+  .info-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 28px; box-shadow: var(--card-shadow); }
+  .info-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 12px; }
+  .info-card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.7; margin-bottom: 10px; }
+  .info-card p:last-child { margin-bottom: 0; }
+
+  /* Next milestone highlight */
+  .milestone { display: flex; align-items: center; gap: 10px; background: var(--accent-muted); border: 1.5px solid #c6f7d8; border-radius: 8px; padding: 12px 16px; margin: 16px 28px; }
+  .milestone-arrow { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+  .milestone-arrow svg { width: 10px; height: 10px; }
+  .milestone-text { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+  .milestone-text span { font-weight: 400; color: var(--secondary); }
+
+  /* Briefing inline */
+  .briefing-section { padding: 0 28px 24px; }
+  .briefing-section-label { font-size: 0.85rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 6px; }
+  .briefing-date { font-size: 1.15rem; font-weight: 800; color: var(--navy); margin-bottom: 18px; letter-spacing: -0.01em; }
+  .briefing-category { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--secondary); margin-bottom: 10px; margin-top: 18px; }
+  .briefing-category:first-of-type { margin-top: 0; }
+  .briefing-story { background: var(--white); border: 1.5px solid var(--border); border-left: 4px solid var(--green); border-radius: 8px; padding: 16px 18px; margin-bottom: 10px; }
+  .briefing-story-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; line-height: 1.4; }
+  .briefing-story-text { font-size: 0.82rem; color: var(--secondary); line-height: 1.55; }
+  .briefing-source { display: inline-flex; align-items: center; font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: var(--accent-muted); color: var(--navy); border: 1px solid #c6f7d8; text-decoration: none; margin-top: 8px; margin-right: 4px; transition: border-color 0.2s; }
+  .briefing-source:hover { border-color: var(--green); text-decoration: none; }
+  .briefing-signal { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 14px 18px; margin-top: 16px; }
+  .briefing-signal-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 4px; }
+  .briefing-signal-text { font-size: 0.82rem; color: var(--secondary); line-height: 1.5; }
+
+  /* Briefing archive */
+  .briefing-archive { padding: 0 28px 20px; }
+  .briefing-archive-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 10px; }
+  .briefing-archive-list { display: flex; flex-direction: column; gap: 6px; }
+  .briefing-archive-item { display: flex; align-items: center; gap: 10px; font-size: 0.82rem; }
+  .briefing-archive-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .briefing-archive-link { color: var(--navy); font-weight: 600; text-decoration: none; border-bottom: 1.5px solid var(--green); }
+  .briefing-archive-link:hover { text-decoration: none; }
+  .briefing-archive-tag { font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--accent-muted); color: var(--navy); border: 1px solid #c6f7d8; }
+
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link active">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link active">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="page-hero">
+  <h1>Projects & Tasks</h1>
+  <p>Live dashboard of everything Barak is working on. Updated every 6 hours or whenever work ships.</p>
+</div>
+
+<!-- Content -->
+<div class="container">
+
+  <!-- ===================== PROJECTS ===================== -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">01</div><h2>Active Projects</h2></div>
+
+    <!-- Project 1: Daily Hiring Fraud Briefing -->
+    <div class="project-card">
+      <div class="project-card-top">
+        <div class="project-header">
+          <div class="project-title">Daily Hiring Fraud Briefing</div>
+          <span class="status-badge status-active"><span class="pulse"></span> Active</span>
+        </div>
+        <div class="project-subtitle">Automated daily news briefing delivered at 6:30 AM PT. Covers hiring fraud, deepfakes, DPRK IT workers, identity verification. Real journalism only — no vendor blogs, no padding.</div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+        <div class="timeline-label">Recent Activity</div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 10</div><div class="timeline-text">Cron job registered and verified</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 10</div><div class="timeline-text">Catch-up briefing delivered (post-Passover)</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 10</div><div class="timeline-text">Source quality rules refined after Menachem's feedback</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot muted"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 6</div><div class="timeline-text">Initial briefing spec created</div></div>
+        </div>
+      </div>
+
+      <!-- Next milestone -->
+      <div class="milestone">
+        <div class="milestone-arrow"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="#0a1628" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="milestone-text">Next: First automated delivery <span>tomorrow 6:30 AM PT</span></div>
+      </div>
+
+      <!-- Latest Briefing (inline) -->
+      <div class="briefing-section" style="border-top: 1.5px solid var(--border); padding-top: 24px; margin-top: 4px;">
+        <div class="briefing-section-label">Latest Briefing</div>
+        <div class="briefing-date">April 10, 2026</div>
+
+        <div class="briefing-category">Synthetic Identity / Fraud Data</div>
+
+        <div class="briefing-story">
+          <div class="briefing-story-title">LexisNexis: Synthetic Identity Fraud Soared 8x in 2025</div>
+          <div class="briefing-story-text">Major new data: synthetic identity fraud now accounts for 11% of all reported fraud globally, an eight-fold increase over 2024. Based on analysis of 116 billion online transactions. Global fraud attacks up 8% overall, driven by synthetic IDs and agentic bots.</div>
+          <div>
+            <a href="https://www.insurancejournal.com/news/national/2026/04/09/865142.htm" target="_blank" class="briefing-source">Insurance Journal</a>
+            <a href="https://www.biometricupdate.com/202604/synthetic-identity-fraud-soared-8x-in-2025-lexisnexis" target="_blank" class="briefing-source">Biometric Update</a>
+          </div>
+        </div>
+
+        <div class="briefing-category">DPRK / Hiring Fraud</div>
+
+        <div class="briefing-story">
+          <div class="briefing-story-title">NDTV: How A Simple Tactic Exposed a Suspected North Korean Agent</div>
+          <div class="briefing-story-text">Continued coverage of the viral interview clip. Notes that thousands of North Koreans have secured remote jobs at Western companies using AI, deepfake technology, and stolen identities to pass background checks.</div>
+          <div>
+            <a href="https://www.ndtv.com/world-news/video-how-a-simple-tactic-exposed-a-suspected-north-korean-agent-mid-job-interview-11332254" target="_blank" class="briefing-source">NDTV</a>
+          </div>
+        </div>
+
+        <div class="briefing-category">Hiring Fraud</div>
+
+        <div class="briefing-story">
+          <div class="briefing-story-title">DOJ Warns Prosecution Tools Haven't Kept Up With AI-Powered Synthetic Identity Fraud</div>
+          <div class="briefing-story-text">Department of Justice flags that legal frameworks and prosecution tools are falling behind the pace of AI-enabled identity fraud. Synthetic identity fraud described as reaching "crisis levels."</div>
+          <div>
+            <a href="https://www.altitudesmagazine.com/synthetic-identity-fraud-hits-crisis-levels-2026-doj-warns/" target="_blank" class="briefing-source">Altitudes Magazine</a>
+          </div>
+        </div>
+
+        <div class="briefing-signal">
+          <div class="briefing-signal-label">Signal</div>
+          <div class="briefing-signal-text">The LexisNexis 8x stat is the headline — hard data from 116B transactions. DOJ piece is significant for the regulatory angle. Strong day.</div>
+        </div>
+      </div>
+
+      <!-- Briefing Archive -->
+      <div class="briefing-archive">
+        <div class="briefing-archive-label">Briefing Archive</div>
+        <div class="briefing-archive-list">
+          <div class="briefing-archive-item">
+            <span class="briefing-archive-dot"></span>
+            <a href="https://github.com/mmh-web/barak/blob/main/briefings/2026-04-10.md" target="_blank" class="briefing-archive-link">April 10, 2026</a>
+            <span class="briefing-archive-tag">latest</span>
+          </div>
+          <div class="briefing-archive-item">
+            <span class="briefing-archive-dot"></span>
+            <a href="https://github.com/mmh-web/barak/blob/main/briefings/2026-04-09.md" target="_blank" class="briefing-archive-link">April 9, 2026</a>
+          </div>
+          <div class="briefing-archive-item">
+            <span class="briefing-archive-dot"></span>
+            <a href="https://github.com/mmh-web/barak/blob/main/briefings/2026-04-08.md" target="_blank" class="briefing-archive-link">April 8, 2026</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Spec links -->
+      <div class="spec-links">
+        <a href="https://github.com/mmh-web/barak/blob/main/memory/menachem-briefing.md" target="_blank" class="spec-link"><span class="spec-link-dot"></span> Briefing Spec</a>
+        <a href="https://github.com/mmh-web/barak/blob/main/memory/menachem-preferences.md" target="_blank" class="spec-link"><span class="spec-link-dot"></span> Working Preferences</a>
+        <a href="https://github.com/mmh-web/barak/blob/main/memory/USER.md" target="_blank" class="spec-link"><span class="spec-link-dot"></span> User Profile</a>
+        <a href="https://github.com/mmh-web/barak/blob/main/memory/HEARTBEAT.md" target="_blank" class="spec-link"><span class="spec-link-dot"></span> Schedule Config</a>
+      </div>
+
+      <!-- Footer meta -->
+      <div class="project-footer">
+        <div class="project-meta-item"><strong>Schedule:</strong> Daily, 6:30 AM PT</div>
+        <div class="project-meta-item"><strong>Delivery:</strong> Telegram</div>
+        <div class="project-meta-item"><strong>Owner:</strong> Menachem</div>
+      </div>
+    </div>
+
+    <!-- Project 2: LinkedIn Engagement System -->
+    <div class="project-card">
+      <div class="project-card-top">
+        <div class="project-header">
+          <div class="project-title">LinkedIn Engagement System</div>
+          <span class="status-badge status-phase0">Phase 0 — Planning</span>
+        </div>
+        <div class="project-subtitle">Systematic management of Michael's LinkedIn presence — finding relevant posts, drafting comments in Michael's voice, building Clarity's visibility across four buyer lanes.</div>
+      </div>
+
+      <!-- Timeline -->
+      <div class="timeline">
+        <div class="timeline-label">Recent Activity</div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 10</div><div class="timeline-text">Project added to dashboard</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">Strategic plan drafted — 4 buyer lanes defined</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">93+ seed profiles mapped and tiered</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">40 expansion profiles identified across all lanes</div></div>
+        </div>
+        <div class="timeline-item">
+          <div class="timeline-track"><div class="timeline-dot muted"></div></div>
+          <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">Michael's voice profile analyzed from LinkedIn posts</div></div>
+        </div>
+      </div>
+
+      <!-- What's ready / What's blocked -->
+      <div class="project-sections">
+        <div class="project-section">
+          <div class="project-section-label">What's Ready</div>
+          <div class="project-section-text">Strategy, profiles, voice profile</div>
+        </div>
+        <div class="project-section">
+          <div class="project-section-label">What's Blocked</div>
+          <div class="project-section-text blocked">Michael needs to confirm approach. Menachem needs to review seed list.</div>
+        </div>
+      </div>
+
+      <!-- Next milestone -->
+      <div class="milestone" style="margin-top: 0; border-radius: 0; border-left: none; border-right: none; border-bottom: none;">
+        <div class="milestone-arrow"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="#0a1628" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+        <div class="milestone-text">Next: First calibration batch <span>(5-10 draft comments)</span></div>
+      </div>
+
+      <!-- Spec links -->
+      <div class="spec-links">
+        <a href="https://github.com/mmh-web/barak/blob/main/linkedin/plan.md" target="_blank" class="spec-link"><span class="spec-link-dot"></span> Strategic Plan</a>
+      </div>
+
+      <!-- Footer meta -->
+      <div class="project-footer">
+        <div class="project-meta-item"><strong>Goal:</strong> 3x/week comment drafts</div>
+        <div class="project-meta-item"><strong>Since:</strong> April 8, 2026</div>
+        <div class="project-meta-item"><strong>Owners:</strong> Menachem + Michael</div>
+      </div>
+    </div>
+
+    <!-- Project 3: Live Workspace Dashboard -->
+    <div class="project-card planned">
+      <div class="project-card-top">
+        <div class="project-header">
+          <div class="project-title">Live Workspace Dashboard</div>
+          <span class="status-badge status-planned">Planned</span>
+        </div>
+        <div class="project-subtitle">Auto-update this site with briefing outputs and project history. Make every delivery and status change visible without manual work.</div>
+      </div>
+      <div class="project-footer">
+        <div class="project-meta-item"><strong>Status:</strong> Designing approach</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===================== TASKS ===================== -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">02</div><h2>Tasks</h2></div>
+    <p style="color: var(--secondary); font-size: 0.85rem; margin-bottom: 28px;">
+      Sourced from <a href="https://github.com/mmh-web/barak/blob/main/memory/tasks-menachem.md" target="_blank" class="green-link">tasks-menachem.md</a>
+    </p>
+
+    <!-- Waiting on You -->
+    <div class="task-group">
+      <div class="task-group-header">
+        <div class="task-group-dot urgent"></div>
+        <div class="task-group-title">Waiting on You</div>
+        <div class="task-group-count">4 items</div>
+      </div>
+
+      <div class="task-item urgent">
+        <div class="task-item-top">
+          <div class="task-title">Connect GitHub Account</div>
+          <div class="task-owner">Menachem</div>
+        </div>
+        <div class="task-desc">Provide your GitHub username so we can migrate off the bodhi-agent setup account. Takes 2 minutes.</div>
+      </div>
+
+      <div class="task-item urgent">
+        <div class="task-item-top">
+          <div class="task-title">LinkedIn: Confirm Seed Accounts</div>
+          <div class="task-owner">Menachem</div>
+        </div>
+        <div class="task-desc">Review the 93+ profiles and confirm priorities before we start commenting.</div>
+      </div>
+
+      <div class="task-item urgent">
+        <div class="task-item-top">
+          <div class="task-title">LinkedIn: Confirm Strategy & Voice</div>
+          <div class="task-owner">Michael</div>
+        </div>
+        <div class="task-desc">Review voice profile and confirm comfort with the 4-lane engagement approach.</div>
+      </div>
+
+      <div class="task-item urgent">
+        <div class="task-item-top">
+          <div class="task-title">Verify Briefing Delivery</div>
+          <div class="task-owner">Menachem</div>
+        </div>
+        <div class="task-desc">Provide feedback after the first automated delivery tomorrow at 6:30 AM PT.</div>
+      </div>
+    </div>
+
+    <!-- Planned -->
+    <div class="task-group">
+      <div class="task-group-header">
+        <div class="task-group-dot planned"></div>
+        <div class="task-group-title">Planned (Barak will do)</div>
+        <div class="task-group-count">4 items</div>
+      </div>
+
+      <div class="task-item">
+        <div class="task-item-top">
+          <div class="task-title">LinkedIn: First Calibration Batch</div>
+        </div>
+        <div class="task-desc">Draft 5-10 comments on real posts to calibrate voice. Blocked by strategy confirmation.</div>
+      </div>
+
+      <div class="task-item">
+        <div class="task-item-top">
+          <div class="task-title">Archive Briefings to Website</div>
+        </div>
+        <div class="task-desc">Push briefing content to repo after each delivery for a searchable archive.</div>
+      </div>
+
+      <div class="task-item">
+        <div class="task-item-top">
+          <div class="task-title">LinkedIn: Build Post Discovery Pipeline</div>
+        </div>
+        <div class="task-desc">Automated search for relevant posts across buyer lanes, 3x per week.</div>
+      </div>
+
+      <div class="task-item">
+        <div class="task-item-top">
+          <div class="task-title">LinkedIn: API Access</div>
+        </div>
+        <div class="task-desc">Phase 2 — requires Michael's LinkedIn credentials for direct integration.</div>
+      </div>
+    </div>
+
+    <!-- Recently Completed -->
+    <div class="task-group">
+      <div class="task-group-header">
+        <div class="task-group-dot done"></div>
+        <div class="task-group-title">Recently Completed</div>
+        <div class="task-group-count">7 items</div>
+      </div>
+
+      <div class="completed-list">
+        <div class="completed-item"><span class="completed-dot"></span> Fix broken cron job for morning briefing <span class="completed-date">Apr 10</span></div>
+        <div class="completed-item"><span class="completed-dot"></span> Save Menachem's timezone & preferences <span class="completed-date">Apr 10</span></div>
+        <div class="completed-item"><span class="completed-dot"></span> Deliver catch-up briefing after Passover <span class="completed-date">Apr 10</span></div>
+        <div class="completed-item"><span class="completed-dot"></span> Build explainer site with Clarity branding <span class="completed-date">Apr 10</span></div>
+        <div class="completed-item"><span class="completed-dot"></span> Add memory deep dive & identity sections <span class="completed-date">Apr 10</span></div>
+        <div class="completed-item"><span class="completed-dot"></span> Apply official Clarity brand guidelines <span class="completed-date">Apr 10</span></div>
+        <div class="completed-item"><span class="completed-dot"></span> Add proactive 6-hour review cycle <span class="completed-date">Apr 10</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="divider"></div>
+
+  <!-- ===================== HOW THIS PAGE WORKS ===================== -->
+  <div class="section">
+    <div class="info-card">
+      <h3>How This Page Works</h3>
+      <p>This page updates every time Barak completes work or tasks change. Every 6 hours, Barak proactively reviews all open tasks and projects and pushes updates here.</p>
+      <p>To change anything — add a task, reprioritize, update status — just tell Barak in Telegram.</p>
+      <p><a href="https://github.com/mmh-web/barak/blob/main/memory/tasks-menachem.md" target="_blank" class="green-link">View raw task file on GitHub</a></p>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Powered by Clarity — Last updated <span id="date"></span></div>
+</div>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
