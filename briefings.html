@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Briefings — Barak</title>
+<style>
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .green-link { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--green); text-decoration: none; }
+  .green-link:hover { text-decoration: none; color: #0a1628; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  /* Hero */
+  .page-hero { text-align: center; padding: 50px 24px 40px; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-hero p { color: var(--secondary); max-width: 560px; margin: 0 auto; font-size: 0.95rem; }
+
+  /* Briefing content */
+  .briefing-latest-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 6px; display: flex; align-items: center; gap: 8px; }
+  .latest-tag { font-size: 0.68rem; font-weight: 600; padding: 2px 8px; border-radius: 10px; background: var(--accent-muted); color: var(--navy); border: 1px solid #c6f7d8; }
+  .briefing-date-heading { font-size: 1.3rem; font-weight: 800; color: var(--navy); margin-bottom: 20px; letter-spacing: -0.01em; }
+  .briefing-category { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.05em; color: var(--secondary); margin-bottom: 10px; margin-top: 20px; }
+  .briefing-category:first-of-type { margin-top: 0; }
+  .briefing-story { background: var(--white); border: 1.5px solid var(--border); border-left: 4px solid var(--green); border-radius: 8px; padding: 16px 18px; margin-bottom: 10px; box-shadow: var(--card-shadow); }
+  .briefing-story-title { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; line-height: 1.4; }
+  .briefing-story-text { font-size: 0.82rem; color: var(--secondary); line-height: 1.55; }
+  .briefing-source { display: inline-flex; align-items: center; font-size: 0.7rem; font-weight: 600; padding: 3px 10px; border-radius: 12px; background: var(--accent-muted); color: var(--navy); border: 1px solid #c6f7d8; text-decoration: none; margin-top: 8px; margin-right: 4px; transition: border-color 0.2s; }
+  .briefing-source:hover { border-color: var(--green); text-decoration: none; }
+  .briefing-signal { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 14px 18px; margin-top: 20px; }
+  .briefing-signal-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 4px; }
+  .briefing-signal-text { font-size: 0.82rem; color: var(--secondary); line-height: 1.5; }
+  .briefing-raw-link { display: inline-flex; align-items: center; gap: 6px; font-size: 0.78rem; font-weight: 600; color: var(--secondary); margin-top: 12px; text-decoration: none; border-bottom: 1.5px solid var(--border); }
+  .briefing-raw-link:hover { color: var(--navy); border-color: var(--green); text-decoration: none; }
+
+  /* Archive / Collapsible */
+  .section-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 16px; }
+  .collapsible { margin-bottom: 12px; }
+  .collapsible-header { display: flex; align-items: center; width: 100%; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 14px 18px; cursor: pointer; font-family: 'Manrope', sans-serif; font-size: 0.88rem; font-weight: 700; color: var(--navy); gap: 10px; box-shadow: var(--card-shadow); transition: border-color 0.2s; }
+  .collapsible-header:hover { border-color: var(--green); }
+  .collapsible-signal { font-size: 0.8rem; font-weight: 400; color: var(--secondary); flex: 1; min-width: 0; }
+  .collapsible-arrow { margin-left: auto; font-size: 0.8rem; color: var(--secondary); transition: transform 0.2s; flex-shrink: 0; }
+  .collapsible.open .collapsible-arrow { transform: rotate(90deg); }
+  .collapsible-body { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+  .collapsible.open .collapsible-body { max-height: 5000px; }
+  .collapsible-inner { padding: 18px; }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="briefings.html" class="nav-link active">Briefings</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="briefings.html" class="nav-link active">Briefings</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="page-hero">
+  <h1>Briefings</h1>
+  <p>Daily hiring fraud intelligence. Real journalism, hard data, no filler.</p>
+</div>
+
+<!-- Content -->
+<div class="container">
+
+  <!-- Latest Briefing: April 10, 2026 -->
+  <div class="briefing-latest-label">Latest Briefing <span class="latest-tag">latest</span></div>
+  <div class="briefing-date-heading">April 10, 2026</div>
+
+  <div class="briefing-category">Synthetic Identity / Fraud Data</div>
+  <div class="briefing-story">
+    <div class="briefing-story-title">LexisNexis: Synthetic Identity Fraud Soared 8x in 2025</div>
+    <div class="briefing-story-text">Major new data: synthetic identity fraud now accounts for 11% of all reported fraud globally, an eight-fold increase over 2024. Based on analysis of 116 billion online transactions. Global fraud attacks up 8% overall, driven by synthetic IDs and agentic bots.</div>
+    <div>
+      <a href="https://www.insurancejournal.com/news/national/2026/04/09/865142.htm" target="_blank" class="briefing-source">Insurance Journal</a>
+      <a href="https://www.biometricupdate.com/202604/synthetic-identity-fraud-soared-8x-in-2025-lexisnexis" target="_blank" class="briefing-source">Biometric Update</a>
+    </div>
+  </div>
+
+  <div class="briefing-category">DPRK / Hiring Fraud</div>
+  <div class="briefing-story">
+    <div class="briefing-story-title">NDTV: How A Simple Tactic Exposed a Suspected North Korean Agent</div>
+    <div class="briefing-story-text">Continued coverage of the viral interview clip. Notes that thousands of North Koreans have secured remote jobs at Western companies using AI, deepfake technology, and stolen identities to pass background checks.</div>
+    <div>
+      <a href="https://www.ndtv.com/world-news/video-how-a-simple-tactic-exposed-a-suspected-north-korean-agent-mid-job-interview-11332254" target="_blank" class="briefing-source">NDTV</a>
+    </div>
+  </div>
+
+  <div class="briefing-category">Hiring Fraud</div>
+  <div class="briefing-story">
+    <div class="briefing-story-title">DOJ Warns Prosecution Tools Haven't Kept Up With AI-Powered Synthetic Identity Fraud</div>
+    <div class="briefing-story-text">Department of Justice flags that legal frameworks and prosecution tools are falling behind the pace of AI-enabled identity fraud. Synthetic identity fraud described as reaching "crisis levels."</div>
+    <div>
+      <a href="https://www.altitudesmagazine.com/synthetic-identity-fraud-hits-crisis-levels-2026-doj-warns/" target="_blank" class="briefing-source">Altitudes Magazine</a>
+    </div>
+  </div>
+
+  <div class="briefing-signal">
+    <div class="briefing-signal-label">Signal</div>
+    <div class="briefing-signal-text">The LexisNexis 8x stat is the headline — hard data from 116B transactions. DOJ piece is significant for the regulatory angle. Strong day.</div>
+  </div>
+
+  <a href="https://github.com/mmh-web/barak/blob/main/briefings/2026-04-10.md" target="_blank" class="briefing-raw-link">View raw markdown on GitHub &#8594;</a>
+
+  <div class="divider"></div>
+
+  <!-- Archive -->
+  <div class="section-label">Archive</div>
+
+  <!-- April 9 -->
+  <div class="collapsible">
+    <button class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+      <span>April 9, 2026</span>
+      <span class="collapsible-signal">Viral DPRK interview video is story of the week. Trulioo moving to continuous verification.</span>
+      <span class="collapsible-arrow">&#9656;</span>
+    </button>
+    <div class="collapsible-body">
+      <div class="collapsible-inner">
+        <div class="briefing-category">DPRK / Hiring Fraud</div>
+        <div class="briefing-story">
+          <div class="briefing-story-title">TechCrunch: Video Shows Interviewer Exposing North Korean Fake IT Worker</div>
+          <div class="briefing-story-text">A blockchain security researcher caught a remote candidate posing as Japanese developer "Taro Aikuchi" — likely a DPRK operative — after the candidate froze and refused to insult Kim Jong Un during a video interview. The tactic has gone viral but experts note it doesn't always work for operatives based in China or Russia.</div>
+          <div>
+            <a href="https://techcrunch.com/2026/04/06/watch-this-video-of-how-a-job-interviewer-exposes-a-north-korean-fake-it-worker/" target="_blank" class="briefing-source">TechCrunch</a>
+          </div>
+        </div>
+
+        <div class="briefing-story">
+          <div class="briefing-story-title">Trulioo Pushes Beyond One-Time Identity Checks</div>
+          <div class="briefing-story-text">Trulioo expanding into continuous identity monitoring, noting that fraud patterns evolve after onboarding. Behavioral monitoring helps distinguish synthetic identities from account takeovers.</div>
+          <div>
+            <a href="https://www.pymnts.com/identity/2026/trulioo-pushes-back-beyond-one-time-identity-checks/" target="_blank" class="briefing-source">PYMNTS</a>
+          </div>
+        </div>
+
+        <div class="briefing-category">Workplace AI</div>
+        <div class="briefing-story">
+          <div class="briefing-story-title">CBIA: Workplace AI Deepfakes Create New Employer Liability</div>
+          <div class="briefing-story-text">AI-generated deepfakes have arrived in the workplace, creating a liability category that didn't exist two years ago. Covers implications for HR, legal, and compliance teams.</div>
+          <div>
+            <a href="https://www.cbia.com/news/hr-safety/workplace-deepfakes-new-employer-liability-frontier" target="_blank" class="briefing-source">CBIA</a>
+          </div>
+        </div>
+
+        <div class="briefing-signal">
+          <div class="briefing-signal-label">Signal</div>
+          <div class="briefing-signal-text">The viral DPRK interview video is the story of the week. Trulioo piece shows IDV vendors are moving toward continuous verification — relevant to Clarity's positioning.</div>
+        </div>
+
+        <a href="https://github.com/mmh-web/barak/blob/main/briefings/2026-04-09.md" target="_blank" class="briefing-raw-link">View raw markdown on GitHub &#8594;</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- April 8 -->
+  <div class="collapsible">
+    <button class="collapsible-header" onclick="this.parentElement.classList.toggle('open')">
+      <span>April 8, 2026</span>
+      <span class="collapsible-signal">DPRK-Iran connection is new and significant. Forbes on broader hiring fraud problem.</span>
+      <span class="collapsible-arrow">&#9656;</span>
+    </button>
+    <div class="collapsible-body">
+      <div class="collapsible-inner">
+        <div class="briefing-category">DPRK / Hiring Fraud</div>
+        <div class="briefing-story">
+          <div class="briefing-story-title">North Korea Now Recruiting Iranian Workers for IT Job Fraud</div>
+          <div class="briefing-story-text">Internal documents obtained by Flare show DPRK facilitators actively targeting Iranian IT professionals on LinkedIn, coaching them for interviews and identity fraud. At least 14 Iranian workers entered the recruitment pipeline; two received offer letters from US employers.</div>
+          <div>
+            <a href="https://www.scworld.com/news/north-korea-recruits-iranian-workers-for-it-job-fraud" target="_blank" class="briefing-source">SC Media</a>
+          </div>
+        </div>
+
+        <div class="briefing-story">
+          <div class="briefing-story-title">Forbes: The Hiring Pipeline Has a Fraud Problem</div>
+          <div class="briefing-story-text">Forbes Tech Council piece details how ChatGPT, Claude, and Gemini are being used via second screens during virtual interviews to generate real-time answers. Purpose-built cheating tools now listen to interview audio and feed candidates responses.</div>
+          <div>
+            <a href="https://www.forbes.com/councils/forbestechcouncil/2026/04/08/the-hiring-pipeline-has-a-fraud-problem-and-most-companies-arent-ready-for-it/" target="_blank" class="briefing-source">Forbes</a>
+          </div>
+        </div>
+
+        <div class="briefing-category">Deepfakes</div>
+        <div class="briefing-story">
+          <div class="briefing-story-title">HR Magazine: Viral Video Exposes Deepfake Scammer</div>
+          <div class="briefing-story-text">A clip of a deepfake candidate failing a "three-finger test" during a video interview went viral, prompting discussion on safeguards against AI-generated interview fraud.</div>
+          <div>
+            <a href="https://www.hrmagazine.co.uk/content/news/viral-video-exposed-deepfake-ai-scam" target="_blank" class="briefing-source">HR Magazine</a>
+          </div>
+        </div>
+
+        <div class="briefing-signal">
+          <div class="briefing-signal-label">Signal</div>
+          <div class="briefing-signal-text">Big day — the DPRK-Iran connection is new and significant. Forbes piece is good framing for the broader problem.</div>
+        </div>
+
+        <a href="https://github.com/mmh-web/barak/blob/main/briefings/2026-04-08.md" target="_blank" class="briefing-raw-link">View raw markdown on GitHub &#8594;</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Powered by Clarity — Last updated <span id="date"></span></div>
+</div>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>

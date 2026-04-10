@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>LinkedIn Engagement System — Barak</title>
+<style>
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --warning: #F59E0B; --warning-muted: #FFF7ED; --warning-border: #fed7aa;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .green-link { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--green); text-decoration: none; }
+  .green-link:hover { text-decoration: none; color: #0a1628; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  /* Hero */
+  .page-hero { text-align: center; padding: 50px 24px 16px; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-hero p { color: var(--secondary); max-width: 560px; margin: 0 auto; font-size: 0.95rem; }
+  .breadcrumb { text-align: center; margin-bottom: 24px; }
+  .breadcrumb a { font-size: 0.82rem; color: var(--secondary); font-weight: 600; text-decoration: none; }
+  .breadcrumb a:hover { color: var(--navy); text-decoration: none; }
+  .breadcrumb span { font-size: 0.82rem; color: var(--secondary); }
+
+  /* Status badge */
+  .status-badge { font-size: 0.72rem; font-weight: 600; padding: 4px 12px; border-radius: 20px; display: inline-flex; align-items: center; gap: 6px; }
+  .status-phase0 { background: var(--warning-muted); color: #9a3412; border: 1.5px solid var(--warning-border); }
+
+  /* Project card */
+  .project-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; margin-bottom: 24px; box-shadow: var(--card-shadow); overflow: hidden; }
+  .project-card-top { padding: 28px 28px 0; }
+  .project-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; flex-wrap: wrap; gap: 10px; }
+  .project-title { font-size: 1.1rem; font-weight: 700; }
+  .project-subtitle { font-size: 0.85rem; color: var(--secondary); margin-bottom: 20px; line-height: 1.5; }
+
+  /* Timeline */
+  .timeline { padding: 0 28px 20px; }
+  .timeline-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 12px; }
+  .timeline-item { display: flex; align-items: flex-start; gap: 12px; position: relative; padding-bottom: 14px; }
+  .timeline-item:last-child { padding-bottom: 0; }
+  .timeline-track { display: flex; flex-direction: column; align-items: center; flex-shrink: 0; width: 12px; padding-top: 2px; }
+  .timeline-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .timeline-dot.muted { background: var(--border); }
+  .timeline-line { width: 1.5px; background: var(--border); flex-grow: 1; min-height: 14px; margin-top: 4px; }
+  .timeline-item:last-child .timeline-line { display: none; }
+  .timeline-content { flex: 1; min-width: 0; }
+  .timeline-date { font-size: 0.72rem; color: var(--secondary); font-weight: 600; }
+  .timeline-text { font-size: 0.83rem; color: var(--navy); line-height: 1.45; }
+
+  /* Project sections */
+  .project-sections { display: grid; grid-template-columns: 1fr 1fr; gap: 0; border-top: 1.5px solid var(--border); }
+  .project-section { padding: 20px 28px; }
+  .project-section + .project-section { border-left: 1.5px solid var(--border); }
+  .project-section-label { font-size: 0.72rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.04em; color: var(--secondary); margin-bottom: 8px; }
+  .project-section-text { font-size: 0.83rem; color: var(--navy); line-height: 1.5; }
+  .project-section-text.blocked { color: #9a3412; }
+  @media (max-width: 600px) {
+    .project-sections { grid-template-columns: 1fr; }
+    .project-section + .project-section { border-left: none; border-top: 1.5px solid var(--border); }
+  }
+
+  /* Next milestone */
+  .milestone { display: flex; align-items: center; gap: 10px; background: var(--accent-muted); border: 1.5px solid #c6f7d8; border-radius: 0; border-left: none; border-right: none; padding: 12px 28px; }
+  .milestone-arrow { width: 20px; height: 20px; display: flex; align-items: center; justify-content: center; background: var(--green); border-radius: 50%; flex-shrink: 0; }
+  .milestone-arrow svg { width: 10px; height: 10px; }
+  .milestone-text { font-size: 0.82rem; font-weight: 600; color: var(--navy); }
+  .milestone-text span { font-weight: 400; color: var(--secondary); }
+
+  /* Spec links */
+  .spec-links { display: flex; flex-wrap: wrap; gap: 8px; padding: 16px 28px; border-top: 1.5px solid var(--border); }
+  .spec-link { display: inline-flex; align-items: center; gap: 6px; background: var(--bg); border: 1.5px solid var(--border); border-radius: 6px; padding: 6px 14px; text-decoration: none; color: var(--navy); transition: border-color 0.2s; font-size: 0.78rem; font-weight: 600; }
+  .spec-link:hover { border-color: var(--green); text-decoration: none; }
+  .spec-link-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+
+  /* Footer meta */
+  .project-footer { display: flex; gap: 20px; padding: 14px 28px; border-top: 1.5px solid var(--border); background: var(--bg); flex-wrap: wrap; }
+  .project-meta-item { font-size: 0.75rem; color: var(--secondary); }
+  .project-meta-item strong { color: var(--navy); }
+</style>
+</head>
+<body>
+
+<!-- Nav -->
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link active">Projects & Tasks</a>
+    <a href="briefings.html" class="nav-link">Briefings</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link active">Projects & Tasks</a>
+    <a href="briefings.html" class="nav-link">Briefings</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+</div>
+
+<!-- Hero -->
+<div class="breadcrumb"><a href="projects.html">Projects & Tasks</a> <span>/ LinkedIn Engagement System</span></div>
+<div class="page-hero">
+  <h1>LinkedIn Engagement System</h1>
+  <p>Systematic management of Michael's LinkedIn presence across four buyer lanes.</p>
+</div>
+
+<!-- Content -->
+<div class="container">
+
+  <div class="project-card">
+    <div class="project-card-top">
+      <div class="project-header">
+        <div class="project-title">Project Overview</div>
+        <span class="status-badge status-phase0">Phase 0 — Planning</span>
+      </div>
+      <div class="project-subtitle">Systematic management of Michael's LinkedIn presence — finding relevant posts, drafting comments in Michael's voice, building Clarity's visibility across four buyer lanes. Goal: 3x/week comment drafts ready for Michael's approval.</div>
+    </div>
+
+    <!-- Timeline -->
+    <div class="timeline">
+      <div class="timeline-label">Activity Timeline</div>
+      <div class="timeline-item">
+        <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+        <div class="timeline-content"><div class="timeline-date">Apr 10</div><div class="timeline-text">Project added to dashboard</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+        <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">Strategic plan drafted — 4 buyer lanes defined</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+        <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">93+ seed profiles mapped and tiered</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-track"><div class="timeline-dot"></div><div class="timeline-line"></div></div>
+        <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">40 expansion profiles identified across all lanes</div></div>
+      </div>
+      <div class="timeline-item">
+        <div class="timeline-track"><div class="timeline-dot muted"></div></div>
+        <div class="timeline-content"><div class="timeline-date">Apr 8</div><div class="timeline-text">Michael's voice profile analyzed from LinkedIn posts</div></div>
+      </div>
+    </div>
+
+    <!-- What's ready / What's blocked -->
+    <div class="project-sections">
+      <div class="project-section">
+        <div class="project-section-label">What's Ready</div>
+        <div class="project-section-text">Strategy document with 4 buyer lanes. 93+ seed profiles mapped and tiered. Michael's voice profile analyzed from existing posts. 40 expansion profiles identified.</div>
+      </div>
+      <div class="project-section">
+        <div class="project-section-label">What's Blocked</div>
+        <div class="project-section-text blocked">Michael needs to confirm the engagement approach and review voice profile. Menachem needs to review the 93+ seed account list and confirm priorities.</div>
+      </div>
+    </div>
+
+    <!-- Next milestone -->
+    <div class="milestone">
+      <div class="milestone-arrow"><svg viewBox="0 0 10 10" fill="none"><path d="M2 5h6M5 2l3 3-3 3" stroke="#0a1628" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+      <div class="milestone-text">Next: First calibration batch <span>(5-10 draft comments on real posts)</span></div>
+    </div>
+
+    <!-- Spec links -->
+    <div class="spec-links">
+      <a href="https://github.com/mmh-web/barak/blob/main/linkedin/plan.md" target="_blank" class="spec-link"><span class="spec-link-dot"></span> Strategic Plan</a>
+    </div>
+
+    <!-- Footer meta -->
+    <div class="project-footer">
+      <div class="project-meta-item"><strong>Goal:</strong> 3x/week comment drafts</div>
+      <div class="project-meta-item"><strong>Since:</strong> April 8, 2026</div>
+      <div class="project-meta-item"><strong>Owners:</strong> Menachem + Michael</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- Footer -->
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Powered by Clarity — Last updated <span id="date"></span></div>
+</div>
+
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
