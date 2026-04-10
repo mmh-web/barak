@@ -1,0 +1,283 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Architecture & Memory — Barak</title>
+<style>
+
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --danger: #EF4444; --danger-muted: #FEE2E2;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .section { margin-bottom: 64px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-num { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; background: var(--accent-muted); color: var(--navy); }
+  .section h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+  .card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: var(--card-shadow); transition: border-color 0.3s, transform 0.2s; }
+  .card:hover { border-color: var(--green); transform: translateY(-1px); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.6; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .code-block { background: var(--navy); border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.8rem; color: #c9d1d9; overflow-x: auto; margin: 12px 0; line-height: 1.7; }
+  .code-block .comment { color: #6b7a8d; }
+  .code-block .file { color: var(--green); }
+  .green-text { color: #0a1628; font-weight: 600; }
+  .green-link { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--green); text-decoration: none; }
+  .green-link:hover { text-decoration: none; color: #0a1628; }
+  .accent-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 8px; flex-shrink: 0; margin-top: 6px; }
+  .accent-bar { width: 3px; border-radius: 2px; background: var(--green); flex-shrink: 0; }
+  .danger-bar { width: 3px; border-radius: 2px; background: var(--danger); flex-shrink: 0; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  .page-hero { text-align: center; padding: 50px 24px 40px; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-hero p { color: var(--secondary); max-width: 520px; margin: 0 auto; }
+  .arch-diagram { background: var(--white); border: 1.5px solid var(--border); border-radius: 16px; padding: 40px 24px; margin-bottom: 32px; box-shadow: var(--card-shadow); }
+  .arch-center { text-align: center; margin-bottom: 32px; }
+  .arch-brain { display: inline-flex; align-items: center; justify-content: center; width: 80px; height: 80px; border-radius: 16px; background: var(--accent-muted); border: 2px solid #c6f7d8; font-size: 1.4rem; font-weight: 800; color: var(--navy); margin-bottom: 8px; }
+  .arch-label { font-size: 1rem; font-weight: 700; color: var(--navy); }
+  .arch-sublabel { font-size: 0.78rem; color: var(--secondary); }
+  .arch-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: 12px; }
+  .arch-node { background: var(--bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px; text-align: center; transition: border-color 0.3s; }
+  .arch-node:hover { border-color: var(--green); }
+  .arch-node .node-num { width: 28px; height: 28px; border-radius: 6px; background: var(--accent-muted); display: inline-flex; align-items: center; justify-content: center; font-size: 0.72rem; font-weight: 800; margin-bottom: 8px; }
+  .arch-node .node-title { font-size: 0.82rem; font-weight: 600; margin-bottom: 4px; }
+  .arch-node .node-desc { font-size: 0.72rem; color: var(--secondary); }
+  .memory-flow { display: flex; align-items: stretch; gap: 0; margin-top: 16px; flex-wrap: wrap; }
+  .memory-step { flex: 1; min-width: 170px; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 18px; text-align: center; }
+  .memory-step .step-num { width: 28px; height: 28px; border-radius: 6px; background: var(--green); color: var(--navy); font-weight: 800; font-size: 0.8rem; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+  .memory-step h4 { font-size: 0.88rem; margin-bottom: 6px; }
+  .memory-step p { font-size: 0.78rem; color: var(--secondary); }
+  .arrow-sep { display: flex; align-items: center; justify-content: center; font-size: 18px; color: var(--secondary); padding: 0 6px; min-width: 36px; }
+  @media (max-width: 640px) { .memory-flow { flex-direction: column; align-items: center; } .arrow-sep { transform: rotate(90deg); padding: 8px 0; } }
+  .identity-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; margin-bottom: 20px; }
+  .identity-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: var(--card-shadow); transition: border-color 0.3s; }
+  .identity-card:hover { border-color: var(--green); }
+  .identity-card-header { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; }
+  .identity-card-num { width: 32px; height: 32px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.75rem; font-weight: 800; background: var(--accent-muted); flex-shrink: 0; }
+  .identity-card-name { font-size: 0.92rem; font-weight: 700; }
+  .identity-card-name a { color: var(--navy); border-bottom: 2px solid var(--green); text-decoration: none; }
+  .identity-card-name a:hover { text-decoration: none; }
+  .identity-card-role { font-size: 0.75rem; color: var(--secondary); }
+  .identity-card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.5; }
+  .identity-card .field-list { list-style: none; padding: 0; margin-top: 10px; }
+  .identity-card .field-list li { font-size: 0.82rem; color: var(--secondary); padding: 4px 0; border-bottom: 1px solid var(--border); display: flex; gap: 8px; }
+  .identity-card .field-list li:last-child { border-bottom: none; }
+  .identity-card .field-label { color: var(--navy); font-weight: 600; white-space: nowrap; }
+  .drift-visual { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 28px; margin-top: 20px; box-shadow: var(--card-shadow); }
+  .drift-bar-container { margin: 14px 0; }
+  .drift-bar-label { display: flex; justify-content: space-between; font-size: 0.78rem; color: var(--secondary); margin-bottom: 6px; }
+  .drift-bar { height: 6px; border-radius: 3px; background: var(--border); overflow: hidden; }
+  .drift-bar-fill { height: 100%; border-radius: 3px; }
+  .drift-fill-strong { background: var(--green); width: 95%; }
+  .drift-fill-medium { background: #f59e0b; width: 60%; }
+  .drift-fill-weak { background: var(--danger); width: 25%; }
+  .tip-list { list-style: none; display: grid; gap: 10px; }
+  .tip-list li { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 14px 18px; display: flex; gap: 12px; align-items: flex-start; font-size: 0.88rem; box-shadow: var(--card-shadow); }
+  .tip-list strong { color: var(--navy); }
+</style>
+</head>
+<body>
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link active">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link active">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+</div>
+
+<div class="page-hero">
+  <h1>How Barak Works</h1>
+  <p>Architecture, memory, identity files, and how to get the most out of working with an AI agent.</p>
+</div>
+
+<div class="container">
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">01</div><h2>Architecture</h2></div>
+    <div class="arch-diagram">
+      <div class="arch-center">
+        <div class="arch-brain">B</div>
+        <div class="arch-label">Barak</div>
+        <div class="arch-sublabel">AI Agent on Clarity</div>
+      </div>
+      <div class="arch-grid">
+        <div class="arch-node"><div class="node-num">1</div><div class="node-title">Persistent Workspace</div><div class="node-desc">Files, memory, configs that survive across sessions</div></div>
+        <div class="arch-node"><div class="node-num">2</div><div class="node-title">Linux Shell</div><div class="node-desc">Full terminal — git, python, node, curl, anything</div></div>
+        <div class="arch-node"><div class="node-num">3</div><div class="node-title">Web Browser</div><div class="node-desc">Headless Chromium for browsing, screenshots, scraping</div></div>
+        <div class="arch-node"><div class="node-num">4</div><div class="node-title">Web Search</div><div class="node-desc">Live internet search and page reading</div></div>
+        <div class="arch-node"><div class="node-num">5</div><div class="node-title">Cron Scheduler</div><div class="node-desc">Automated tasks on schedule</div></div>
+        <div class="arch-node"><div class="node-num">6</div><div class="node-title">Telegram</div><div class="node-desc">Sends & receives messages in team chats</div></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">02</div><h2>How Memory Works</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">Two layers of memory. Understanding this is key to knowing when Barak remembers things and when he doesn't.</p>
+    <div class="memory-flow">
+      <div class="memory-step"><div class="step-num">1</div><h4>Chat Context</h4><p>Current conversation. Has a token window — old messages get compressed. Details can get lost.</p></div>
+      <div class="arrow-sep">&rarr;</div>
+      <div class="memory-step"><div class="step-num">2</div><h4>Memory Files</h4><p>Markdown files on disk. Permanent. Preferences, specs, and facts live here.</p></div>
+      <div class="arrow-sep">&rarr;</div>
+      <div class="memory-step"><div class="step-num">3</div><h4>Recalled on Demand</h4><p>Before answering, Barak searches files. If it isn't written down, it might not be found.</p></div>
+    </div>
+    <div class="code-block" style="margin-top: 20px;">
+      <span class="comment"># Memory files on disk (click to view):</span><br>
+      <a href="https://github.com/mmh-web/barak/blob/main/memory/USER.md" target="_blank" style="color: #61F393; text-decoration: none;"><span class="file">USER.md</span></a>          <span class="comment">&larr; who I work with, timezones, prefs</span><br>
+      <a href="https://github.com/mmh-web/barak/blob/main/memory/menachem-briefing.md" target="_blank" style="color: #61F393; text-decoration: none;"><span class="file">memory/menachem-briefing.md</span></a>  <span class="comment">&larr; briefing spec & rules</span><br>
+      <a href="https://github.com/mmh-web/barak/blob/main/memory/menachem-preferences.md" target="_blank" style="color: #61F393; text-decoration: none;"><span class="file">memory/menachem-preferences.md</span></a> <span class="comment">&larr; working style</span><br>
+      <a href="https://github.com/mmh-web/barak/blob/main/memory/HEARTBEAT.md" target="_blank" style="color: #61F393; text-decoration: none;"><span class="file">HEARTBEAT.md</span></a>     <span class="comment">&larr; scheduled task definitions</span><br>
+      <a href="https://github.com/mmh-web/barak/blob/main/memory/SOUL.md" target="_blank" style="color: #61F393; text-decoration: none;"><span class="file">SOUL.md</span></a>           <span class="comment">&larr; personality & behavior rules</span><br>
+    </div>
+    <div class="card" style="margin-top: 14px; border-left: 3px solid var(--green);"><h3>The Key Insight</h3><p>If you tell Barak something important and it doesn't get written to a file — future sessions may not know it. That's why "write it down" matters.</p></div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">03</div><h2>Memory Deep Dive</h2></div>
+    <div class="card" style="background: var(--accent-muted); border-color: #c6f7d8; margin-bottom: 20px;">
+      <h3>Why File-Based Memory Is Powerful</h3>
+      <p style="margin-bottom: 14px;">Most AI assistants have one type of memory: <strong>the conversation window</strong>. Once it gets long enough, the oldest messages fall off. Details are gone forever.</p>
+      <p style="margin-bottom: 14px;">Barak's memory works differently. The file system <em>is</em> the memory — and it has no upper limit. Every fact gets written to markdown on disk. Those files don't expire, don't get compressed, and don't fall off any edge.</p>
+      <p style="margin-bottom: 14px;"><strong>The insight:</strong> this turns memory into a search problem, not a capacity problem. Search is a solved problem getting more efficient every day. As the platform develops, the file system is converging toward something that functions like a limitless context window.</p>
+      <p style="font-weight: 600;">In theory: infinite memory with perfect recall. In practice: we're not there yet.</p>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--danger); margin-bottom: 20px;">
+      <h3>Where It Breaks Down Today</h3>
+      <div style="display: grid; gap: 14px; margin-top: 10px;">
+        <div style="display:flex;gap:10px;"><span class="danger-bar"></span><div><strong>The write problem.</strong><p>Memory is only as good as what gets written. If Barak doesn't save it to a file, future sessions won't know. Saying "save that" helps.</p></div></div>
+        <div style="display:flex;gap:10px;"><span class="danger-bar"></span><div><strong>The staleness problem.</strong><p>Files can become outdated. No automatic expiry on a markdown file — it looks just as valid whether written yesterday or six months ago.</p></div></div>
+        <div style="display:flex;gap:10px;"><span class="danger-bar"></span><div><strong>The search-not-read problem.</strong><p>Search depends on asking the right question. If a fact is filed under an unexpected heading, Barak might miss it.</p></div></div>
+        <div style="display:flex;gap:10px;"><span class="danger-bar"></span><div><strong>The confabulation problem.</strong><p>The biggest failure: Barak <em>thinking</em> he remembers something when he's reconstructing from compressed summaries. The fix: always check the file.</p></div></div>
+      </div>
+    </div>
+    <div class="card" style="border-left: 3px solid #3b82f6;">
+      <h3>What's Improving</h3>
+      <ul style="color: var(--secondary); padding-left: 20px; display: grid; gap: 6px; margin-top: 8px;">
+        <li><strong style="color:var(--navy)">Better automatic writes</strong> — detecting important facts and persisting without being told</li>
+        <li><strong style="color:var(--navy)">Smarter search</strong> — semantic recall that works like natural questions</li>
+        <li><strong style="color:var(--navy)">Lossless context compression</strong> — summaries that preserve critical details</li>
+        <li><strong style="color:var(--navy)">File system as context</strong> — treating the entire workspace as context window extension</li>
+      </ul>
+      <p style="margin-top: 12px; font-weight: 600;">The architecture is right. The execution is catching up.</p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">04</div><h2>Identity Files</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">Four files define Barak's identity. Loaded into his system prompt at session start — they shape how he thinks, talks, and acts.</p>
+    <div class="identity-grid">
+      <div class="identity-card"><div class="identity-card-header"><div class="identity-card-num">S</div><div><div class="identity-card-name"><a href="https://github.com/mmh-web/barak/blob/main/identity/SOUL.md" target="_blank">SOUL.md</a></div><div class="identity-card-role">Personality & behavior</div></div></div><p>The deepest layer. Personality, communication style, boundaries. Where "sharp and direct, no filler" comes from.</p><ul class="field-list"><li><span class="field-label">Controls:</span> Tone, personality, values</li></ul></div>
+      <div class="identity-card"><div class="identity-card-header"><div class="identity-card-num">I</div><div><div class="identity-card-name"><a href="https://github.com/mmh-web/barak/blob/main/identity/IDENTITY.md" target="_blank">IDENTITY.md</a></div><div class="identity-card-role">Name, model, facts</div></div></div><p>The basics: name, model, emoji. Simple constants. A birth certificate.</p><ul class="field-list"><li><span class="field-label">Controls:</span> Name, username, model</li></ul></div>
+      <div class="identity-card"><div class="identity-card-header"><div class="identity-card-num">U</div><div><div class="identity-card-name"><a href="https://github.com/mmh-web/barak/blob/main/identity/USER.md" target="_blank">USER.md</a></div><div class="identity-card-role">Who Barak works for</div></div></div><p>Everything about the people he serves — names, timezones, preferences.</p><ul class="field-list"><li><span class="field-label">Updated by:</span> Telling Barak about yourself</li></ul></div>
+      <div class="identity-card"><div class="identity-card-header"><div class="identity-card-num">A</div><div><div class="identity-card-name"><a href="https://github.com/mmh-web/barak/blob/main/identity/AGENTS.md" target="_blank">AGENTS.md</a></div><div class="identity-card-role">Operational config</div></div></div><p>The rulebook: repo access, workflows, responsibilities, guardrails.</p><ul class="field-list"><li><span class="field-label">Set by:</span> Michael (admin-level)</li></ul></div>
+    </div>
+    <div class="card" style="border-left: 3px solid var(--green); margin-bottom: 20px;">
+      <h3>How to Edit: Just Talk</h3>
+      <p style="margin-bottom: 10px;">No config files to learn. Just tell Barak what you want:</p>
+      <div class="code-block">
+        <span class="comment"># Valid ways to shape identity:</span><br><br>
+        "Be more concise in briefings. Bullet points only."<br>
+        "Don't use emojis in serious reports."<br>
+        "I prefer you flag uncertainties explicitly."<br>
+        "My timezone changed — I'm in NYC now."<br><br>
+        <span class="comment"># The richer, the better:</span><br>
+        <span class="comment"># Communication style, decision-making, ambiguity handling,</span><br>
+        <span class="comment"># specific phrases to use or avoid...</span><br><br>
+        <span class="file">Barak updates the file. Takes effect next session.</span>
+      </div>
+    </div>
+    <div class="drift-visual">
+      <h3 style="margin-bottom: 8px;">The Drift Problem</h3>
+      <p style="color: var(--secondary); margin-bottom: 16px;">Identity files are loaded at session start. As conversations get longer, identity instructions get proportionally smaller. Barak can drift from his configured personality.</p>
+      <div class="drift-bar-container"><div class="drift-bar-label"><span>Session start</span><span>~95%</span></div><div class="drift-bar"><div class="drift-bar-fill drift-fill-strong"></div></div></div>
+      <div class="drift-bar-container"><div class="drift-bar-label"><span>Mid-session (~50k tokens)</span><span>~60%</span></div><div class="drift-bar"><div class="drift-bar-fill drift-fill-medium"></div></div></div>
+      <div class="drift-bar-container"><div class="drift-bar-label"><span>Long session (~150k tokens)</span><span>~25%</span></div><div class="drift-bar"><div class="drift-bar-fill drift-fill-weak"></div></div></div>
+      <p style="color: var(--secondary); margin-top: 16px; font-size: 0.85rem;">If Barak starts feeling generic — it's drift. A fresh session resets it. Or just say: <strong>"You're drifting, re-read your SOUL."</strong></p>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">05</div><h2>Capabilities</h2></div>
+    <div class="card-grid">
+      <div class="card"><h3>Daily Briefings</h3><p>Search the web on a schedule, filter by source quality, deliver to Telegram automatically.</p></div>
+      <div class="card"><h3>Write & Run Code</h3><p>Python, Node, bash scripts. Build tools, process data, automate workflows.</p></div>
+      <div class="card"><h3>Git & GitHub</h3><p>Clone repos, create branches, make commits, open PRs, review code.</p></div>
+      <div class="card"><h3>Web Research</h3><p>Search, fetch pages, read articles, extract data. Deep or broad.</p></div>
+      <div class="card"><h3>Data Processing</h3><p>Analyze CSVs, build reports, track metrics, generate charts.</p></div>
+      <div class="card"><h3>API Integrations</h3><p>Connect to Slack, Google services, GitHub, or any API.</p></div>
+    </div>
+  </div>
+
+  <div class="section">
+    <div class="section-header"><div class="section-num">06</div><h2>Tips for Working With Barak</h2></div>
+    <ul class="tip-list">
+      <li style="border-left: 3px solid var(--green);"><div style="display:flex;align-items:center;gap:8px;"><span class="accent-dot"></span></div><div><strong>Be explicit and say "write it down."</strong><br><span style="color:var(--secondary)">"My timezone is PT, I'm in LA. Save that." — locks it into persistent memory.</span></div></li>
+      <li style="border-left: 3px solid var(--green);"><div style="display:flex;align-items:center;gap:8px;"><span class="accent-dot"></span></div><div><strong>Call out mistakes directly.</strong><br><span style="color:var(--secondary)">Barak can check logs, configs, and state — but only if he knows something's off.</span></div></li>
+      <li style="border-left: 3px solid var(--green);"><div style="display:flex;align-items:center;gap:8px;"><span class="accent-dot"></span></div><div><strong>Think of requests as specs, not wishes.</strong><br><span style="color:var(--secondary)">"Send me news at 6:30 AM PT, max 5 bullets, real journalism only" — that's implementable.</span></div></li>
+      <li style="border-left: 3px solid var(--green);"><div style="display:flex;align-items:center;gap:8px;"><span class="accent-dot"></span></div><div><strong>Ask him to build things.</strong><br><span style="color:var(--secondary)">Not just Q&A — recurring workflows, monitoring scripts, data pipelines.</span></div></li>
+      <li style="border-left: 3px solid var(--danger);"><div style="display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--danger);margin-right:8px;flex-shrink:0;margin-top:6px;"></span></div><div><strong>Don't assume he remembered something from weeks ago.</strong><br><span style="color:var(--secondary)">If it wasn't written to a file, it may have faded. When in doubt, restate it.</span></div></li>
+      <li style="border-left: 3px solid var(--danger);"><div style="display:flex;align-items:center;gap:8px;"><span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:var(--danger);margin-right:8px;flex-shrink:0;margin-top:6px;"></span></div><div><strong>Don't let him get away with vague answers.</strong><br><span style="color:var(--secondary)">If Barak says "it should be working" without proof — push back.</span></div></li>
+    </ul>
+  </div>
+
+</div>
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Powered by Clarity — Last updated <span id="date"></span></div>
+</div>
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
