@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Capabilities & Integrations — Barak</title>
+<style>
+
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --danger: #EF4444; --danger-muted: #FEE2E2;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .section { margin-bottom: 64px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-num { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; background: var(--accent-muted); color: var(--navy); }
+  .section h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+  .card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: var(--card-shadow); transition: border-color 0.3s, transform 0.2s; }
+  .card:hover { border-color: var(--green); transform: translateY(-1px); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.6; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .green-text { color: #0a1628; font-weight: 600; }
+  .accent-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 8px; flex-shrink: 0; margin-top: 6px; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  .page-hero { text-align: center; padding: 50px 24px 40px; }
+  .page-hero h1 { font-size: 2.2rem; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 10px; }
+  .page-hero p { color: var(--secondary); max-width: 520px; margin: 0 auto; }
+
+  /* Status badges */
+  .status-badge { display: inline-block; font-size: 0.7rem; font-weight: 700; padding: 3px 10px; border-radius: 20px; text-transform: uppercase; letter-spacing: 0.03em; }
+  .badge-active { background: var(--accent-muted); color: var(--navy); border: 1.5px solid #c6f7d8; }
+  .badge-configured { background: #EFF6FF; color: #1e40af; border: 1.5px solid #bfdbfe; }
+  .badge-available { background: #FFF7ED; color: #9a3412; border: 1.5px solid #fed7aa; }
+
+  /* Tool card */
+  .tool-card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 20px; box-shadow: var(--card-shadow); transition: border-color 0.3s, transform 0.2s; }
+  .tool-card:hover { border-color: var(--green); transform: translateY(-1px); }
+  .tool-card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 8px; }
+  .tool-card h3 { font-size: 0.92rem; font-weight: 700; color: var(--navy); margin: 0; }
+  .tool-card p { font-size: 0.82rem; color: var(--secondary); line-height: 1.5; }
+
+  /* Integration list */
+  .integration-list { display: grid; gap: 10px; }
+  .integration-item { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px 20px; display: flex; align-items: center; gap: 14px; box-shadow: var(--card-shadow); transition: border-color 0.3s; }
+  .integration-item:hover { border-color: var(--green); }
+  .integration-dot { width: 10px; height: 10px; border-radius: 50%; background: var(--green); flex-shrink: 0; }
+  .integration-dot.dot-available { background: var(--border); }
+  .integration-info { flex: 1; }
+  .integration-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+  .integration-desc { font-size: 0.78rem; color: var(--secondary); margin-top: 2px; }
+
+  /* Skill grid */
+  .skill-card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 18px; box-shadow: var(--card-shadow); transition: border-color 0.3s; }
+  .skill-card:hover { border-color: var(--green); }
+  .skill-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; font-family: 'JetBrains Mono', 'Fira Code', monospace; }
+  .skill-desc { font-size: 0.8rem; color: var(--secondary); line-height: 1.5; }
+
+  /* Not connected */
+  .not-connected-item { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 16px 20px; display: flex; align-items: flex-start; gap: 14px; box-shadow: var(--card-shadow); transition: border-color 0.3s; }
+  .not-connected-item:hover { border-color: var(--border); }
+  .nc-icon { width: 10px; height: 10px; border-radius: 50%; background: var(--border); flex-shrink: 0; margin-top: 5px; }
+  .nc-info { flex: 1; }
+  .nc-name { font-size: 0.88rem; font-weight: 700; color: var(--navy); }
+  .nc-what { font-size: 0.78rem; color: var(--secondary); margin-top: 2px; }
+  .nc-how { font-size: 0.72rem; color: var(--secondary); margin-top: 4px; font-style: italic; }
+
+  /* Channel row */
+  .channel-card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: var(--card-shadow); transition: border-color 0.3s; }
+  .channel-card:hover { border-color: var(--green); }
+  .channel-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .channel-name { font-size: 0.95rem; font-weight: 700; color: var(--navy); }
+  .channel-desc { font-size: 0.82rem; color: var(--secondary); line-height: 1.5; }
+
+  .channels-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 14px; }
+  .tools-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 14px; }
+  .skills-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 12px; }
+  .nc-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 10px; }
+</style>
+</head>
+<body>
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link active">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link active">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+</div>
+
+<div class="page-hero">
+  <h1>Capabilities & Integrations</h1>
+  <p>Everything Barak can do today — built-in tools, connected services, and what's available to connect next.</p>
+</div>
+
+<div class="container">
+
+  <!-- Section 1: Core Tools -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">01</div><h2>Core Tools</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">Built-in capabilities that are always available. These run directly on Barak's server — no external APIs needed.</p>
+    <div class="tools-grid">
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Linux Shell</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Full terminal access — git, python3, node, curl, jq. Run any command.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>File System</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Persistent workspace at /workspace. Read, write, edit files. Everything survives across sessions.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Web Search</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Search the internet via Brave API. Returns titles, URLs, and snippets for fast research.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Web Fetch</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Fetch and extract readable content from any URL. HTML to markdown conversion.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Headless Browser</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Full Chromium browser — navigate, screenshot, scrape, and interact with any web page.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Cron Scheduler</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Schedule recurring tasks — daily briefings, periodic syncs, automated monitoring.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Memory System</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Semantic search across markdown memory files. Two layers: conversation context + persistent files on disk.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Lossless Context</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Advanced conversation compression that preserves details in a searchable DAG. Never lose important context.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Sub-agents</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Spawn parallel workers for coding, research, or heavy tasks. Divide and conquer.</p>
+      </div>
+      <div class="tool-card">
+        <div class="tool-card-header"><h3>Text-to-Speech</h3><span class="status-badge badge-active">Active</span></div>
+        <p>Convert text to audio. Generate voice messages and audio content on demand.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 2: Communication Channels -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">02</div><h2>Communication Channels</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">How Barak sends and receives messages.</p>
+    <div class="channels-grid">
+      <div class="channel-card">
+        <div class="channel-header">
+          <span class="channel-name">Telegram</span>
+          <span class="status-badge badge-active">Active</span>
+        </div>
+        <div class="channel-desc">Primary channel. Send and receive messages, reactions, polls, inline buttons. This is where most interaction happens.</div>
+      </div>
+      <div class="channel-card">
+        <div class="channel-header">
+          <span class="channel-name">Slack</span>
+          <span class="status-badge badge-configured">Configured</span>
+        </div>
+        <div class="channel-desc">Connected but not primary. Can send messages, react to posts, pin items, and search channels.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 3: External Integrations -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">03</div><h2>External Integrations</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">Connected services via Composio. These let Barak interact with third-party platforms through their APIs.</p>
+    <div class="integration-list">
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">GitHub</div>
+          <div class="integration-desc">Create repos, commit code, open PRs, manage issues, enable Pages.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Gmail</div>
+          <div class="integration-desc">Read, send, and search emails.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Google Calendar</div>
+          <div class="integration-desc">View and create events, check availability.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Google Drive</div>
+          <div class="integration-desc">List, read, create files and folders.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">YouTube</div>
+          <div class="integration-desc">Search videos, get video info.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Slack (Composio)</div>
+          <div class="integration-desc">Advanced Slack operations beyond the native channel.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Cloudflare</div>
+          <div class="integration-desc">DNS zone management.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">ElevenLabs</div>
+          <div class="integration-desc">Text-to-speech with premium voices.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Browserbase</div>
+          <div class="integration-desc">Cloud browser sessions for heavy scraping.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">SerpAPI</div>
+          <div class="integration-desc">Google search results API.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Tavily</div>
+          <div class="integration-desc">AI-powered web search.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">Giphy</div>
+          <div class="integration-desc">Search and send GIFs.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+      <div class="integration-item">
+        <div class="integration-dot"></div>
+        <div class="integration-info">
+          <div class="integration-name">TinyURL</div>
+          <div class="integration-desc">URL shortening.</div>
+        </div>
+        <span class="status-badge badge-active">Active</span>
+      </div>
+    </div>
+
+    <div class="card" style="margin-top: 20px; border-left: 3px solid var(--green);">
+      <h3>Developer Tools</h3>
+      <p style="margin-bottom: 12px;">Available in the shell environment alongside the core tools.</p>
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 8px;">
+        <div style="display: flex; align-items: center; gap: 8px;"><span class="accent-dot"></span><span style="font-size: 0.85rem;"><strong>Git</strong> — full CLI</span></div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span class="accent-dot"></span><span style="font-size: 0.85rem;"><strong>Python 3</strong> — with pip</span></div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span class="accent-dot"></span><span style="font-size: 0.85rem;"><strong>Node.js 22</strong> — with npm/npx</span></div>
+        <div style="display: flex; align-items: center; gap: 8px;"><span class="accent-dot"></span><span style="font-size: 0.85rem;"><strong>curl / wget</strong></span></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 4: Skills -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">04</div><h2>Skills</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">Specialized instruction sets that activate for specific tasks. When a request matches a skill, Barak loads its playbook and follows it precisely.</p>
+    <div class="skills-grid">
+      <div class="skill-card">
+        <div class="skill-name">google-workspace</div>
+        <div class="skill-desc">Gmail, Calendar, and Drive access via direct credentials.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">github</div>
+        <div class="skill-desc">PR management, CI checks, and code review via gh CLI.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">gh-issues</div>
+        <div class="skill-desc">Fetch issues, spawn sub-agents for fixes, open PRs automatically.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">slack</div>
+        <div class="skill-desc">Slack channel operations, reactions, and pins.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">weather</div>
+        <div class="skill-desc">Weather and forecasts via wttr.in and Open-Meteo.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">composio</div>
+        <div class="skill-desc">200+ external tool integrations through the Composio platform.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">skill-creator</div>
+        <div class="skill-desc">Create and audit new skills from scratch.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">healthcheck</div>
+        <div class="skill-desc">Security hardening and system health audits.</div>
+      </div>
+      <div class="skill-card">
+        <div class="skill-name">lossless-claw</div>
+        <div class="skill-desc">Advanced memory and recall configuration.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Section 5: Not Yet Connected -->
+  <div class="section">
+    <div class="section-header"><div class="section-num">05</div><h2>Not Yet Connected</h2></div>
+    <p style="color: var(--secondary); margin-bottom: 20px;">Services available through Composio or OpenClaw that haven't been set up yet. Each one is a single connection step away.</p>
+    <div class="nc-grid">
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Google Workspace (direct)</div>
+          <div class="nc-what">Full Gmail, Calendar, and Drive without Composio — faster, deeper access.</div>
+          <div class="nc-how">Complete OAuth flow at the auth URL.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Linear</div>
+          <div class="nc-what">Issue tracking — create, update, and query project tasks.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Notion</div>
+          <div class="nc-what">Read and write Notion pages and databases.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Jira</div>
+          <div class="nc-what">Issue tracking for Atlassian-based teams.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Airtable</div>
+          <div class="nc-what">Structured data tables — CRM, content calendars, tracking.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Google Sheets</div>
+          <div class="nc-what">Read, write, and format spreadsheet data.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">HubSpot</div>
+          <div class="nc-what">CRM — contacts, deals, pipeline management.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">X / Twitter</div>
+          <div class="nc-what">Post tweets, monitor mentions, track conversations.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">LinkedIn (API)</div>
+          <div class="nc-what">Direct posting, engagement tracking, profile monitoring.</div>
+          <div class="nc-how">Requires LinkedIn API access (complex setup).</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Outlook / Microsoft 365</div>
+          <div class="nc-what">Email and calendar for Microsoft-based organizations.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Figma</div>
+          <div class="nc-what">Access design files, export assets, comment on designs.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Calendly</div>
+          <div class="nc-what">Scheduling links and availability management.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Discord</div>
+          <div class="nc-what">Bot presence in Discord servers.</div>
+          <div class="nc-how">Configure in OpenClaw channels.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">WhatsApp</div>
+          <div class="nc-what">Direct messaging channel.</div>
+          <div class="nc-how">Configure in OpenClaw channels.</div>
+        </div>
+      </div>
+      <div class="not-connected-item">
+        <div class="nc-icon"></div>
+        <div class="nc-info">
+          <div class="nc-name">Stripe</div>
+          <div class="nc-what">Payment data, invoices, subscription management.</div>
+          <div class="nc-how">Connect via Composio.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Running on OpenClaw — Last updated <span id="date"></span></div>
+</div>
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
