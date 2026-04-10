@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<link rel="icon" href="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846e29_favicon-32x32.png">
+<link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<title>Barak — Clarity AI Agent</title>
+<style>
+
+  :root {
+    --green: #61F393; --navy: #0a1628; --white: #FFFFFF; --bg: #F0F4F8;
+    --secondary: #64748B; --border: #E2E8F0; --accent-muted: #E8FFF0;
+    --danger: #EF4444; --danger-muted: #FEE2E2;
+    --card-bg: #FFFFFF; --card-shadow: 0 1px 3px rgba(10,22,40,0.06);
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: 'Manrope', sans-serif; background: var(--bg); color: var(--navy); line-height: 1.6; overflow-x: hidden; }
+  a { color: var(--navy); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* Nav */
+  .nav { display: flex; align-items: center; justify-content: space-between; padding: 16px 24px; max-width: 1000px; margin: 0 auto; }
+  .nav-logo { height: 26px; }
+  .nav-links { display: flex; gap: 4px; align-items: center; }
+  .nav-link { font-size: 0.82rem; font-weight: 600; color: var(--secondary); padding: 6px 14px; border-radius: 20px; text-decoration: none; transition: all 0.2s; white-space: nowrap; }
+  .nav-link:hover { color: var(--navy); background: rgba(10,22,40,0.04); text-decoration: none; }
+  .nav-link.active { color: var(--navy); background: var(--accent-muted); }
+  .hamburger { display: none; background: none; border: none; color: var(--navy); font-size: 22px; cursor: pointer; padding: 4px 8px; border-radius: 8px; }
+  .hamburger:hover { background: rgba(10,22,40,0.04); }
+  .mobile-menu { display: none; position: absolute; top: 100%; right: 16px; background: var(--white); border: 1.5px solid var(--border); border-radius: 12px; padding: 8px; z-index: 100; min-width: 180px; box-shadow: 0 8px 24px rgba(10,22,40,0.1); }
+  .mobile-menu.show { display: flex; flex-direction: column; }
+  .mobile-menu .nav-link { padding: 10px 16px; }
+  @media (max-width: 700px) { .nav-links { display: none; } .hamburger { display: block; } }
+
+  /* Common */
+  .container { max-width: 900px; margin: 0 auto; padding: 0 24px 80px; }
+  .section { margin-bottom: 64px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
+  .section-num { width: 36px; height: 36px; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 0.85rem; font-weight: 800; flex-shrink: 0; background: var(--accent-muted); color: var(--navy); }
+  .section h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; }
+  .card { background: var(--card-bg); border: 1.5px solid var(--border); border-radius: 8px; padding: 22px; box-shadow: var(--card-shadow); transition: border-color 0.3s, transform 0.2s; }
+  .card:hover { border-color: var(--green); transform: translateY(-1px); }
+  .card h3 { font-size: 0.95rem; font-weight: 700; margin-bottom: 8px; color: var(--navy); }
+  .card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.6; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 14px; }
+  .divider { height: 1.5px; background: var(--border); margin: 48px 0; }
+  .code-block { background: var(--navy); border-radius: 8px; padding: 16px; font-family: 'JetBrains Mono', 'Fira Code', monospace; font-size: 0.8rem; color: #c9d1d9; overflow-x: auto; margin: 12px 0; line-height: 1.7; }
+  .code-block .comment { color: #6b7a8d; }
+  .code-block .file { color: var(--green); }
+  .green-text { color: #0a1628; font-weight: 600; }
+  .green-link { color: var(--navy); font-weight: 600; border-bottom: 2px solid var(--green); text-decoration: none; }
+  .green-link:hover { text-decoration: none; color: #0a1628; }
+  .accent-dot { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--green); margin-right: 8px; flex-shrink: 0; margin-top: 6px; }
+  .accent-bar { width: 3px; border-radius: 2px; background: var(--green); flex-shrink: 0; }
+  .danger-bar { width: 3px; border-radius: 2px; background: var(--danger); flex-shrink: 0; }
+
+  /* Footer */
+  .footer { text-align: center; padding: 40px 24px; border-top: 1.5px solid var(--border); }
+  .footer-logo { height: 22px; margin-bottom: 10px; opacity: 0.8; }
+  .footer-text { color: var(--secondary); font-size: 0.78rem; }
+
+  .hero { text-align: center; padding: 80px 24px 60px; }
+  .hero-badge { display: inline-flex; align-items: center; gap: 8px; background: var(--accent-muted); border: 1.5px solid #c6f7d8; border-radius: 20px; padding: 6px 18px; font-size: 0.8rem; font-weight: 600; color: var(--navy); margin-bottom: 20px; }
+  .hero-badge .pulse { width: 8px; height: 8px; border-radius: 50%; background: var(--green); animation: pulse 2s ease-in-out infinite; }
+  @keyframes pulse { 0%,100% { opacity:1; transform:scale(1); } 50% { opacity:0.5; transform:scale(1.4); } }
+  .hero h1 { font-size: 2.8rem; font-weight: 800; letter-spacing: -0.03em; margin-bottom: 16px; color: var(--navy); }
+  .hero .subtitle { font-size: 1.1rem; color: var(--secondary); max-width: 540px; margin: 0 auto 40px; line-height: 1.7; }
+  .intro-section { max-width: 680px; margin: 0 auto 60px; padding: 0 24px; text-align: center; }
+  .intro-section p { color: var(--secondary); font-size: 0.95rem; line-height: 1.8; }
+  .intro-section strong { color: var(--navy); }
+  .nav-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; max-width: 900px; margin: 0 auto; padding: 0 24px; }
+  .nav-card { background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; padding: 28px; text-align: left; text-decoration: none; color: var(--navy); transition: border-color 0.3s, transform 0.2s, box-shadow 0.3s; display: block; box-shadow: var(--card-shadow); }
+  .nav-card:hover { border-color: var(--green); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(10,22,40,0.08); text-decoration: none; }
+  .nav-card-num { width: 32px; height: 32px; border-radius: 8px; background: var(--accent-muted); display: flex; align-items: center; justify-content: center; font-size: 0.8rem; font-weight: 800; color: var(--navy); margin-bottom: 14px; }
+  .nav-card h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; }
+  .nav-card p { font-size: 0.85rem; color: var(--secondary); line-height: 1.5; }
+  .nav-card .arrow { color: var(--navy); font-size: 0.82rem; margin-top: 14px; display: inline-flex; align-items: center; gap: 4px; font-weight: 600; border-bottom: 2px solid var(--green); }
+  .quick-stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(140px, 1fr)); gap: 12px; max-width: 900px; margin: 48px auto; padding: 0 24px; }
+  .quick-stat { text-align: center; padding: 20px 12px; background: var(--white); border: 1.5px solid var(--border); border-radius: 8px; }
+  .quick-stat .stat-val { font-size: 1.6rem; font-weight: 800; color: var(--navy); }
+  .quick-stat .stat-lbl { font-size: 0.72rem; color: var(--secondary); text-transform: uppercase; letter-spacing: 0.05em; margin-top: 4px; }
+</style>
+</head>
+<body>
+<div class="nav" style="position:relative;">
+  <a href="index.html"><img class="nav-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity"></a>
+  <div class="nav-links">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+  <button class="hamburger" onclick="toggleMenu()">&#9776;</button>
+  <div class="mobile-menu" id="mobileMenu">
+    <a href="index.html" class="nav-link active">Home</a>
+    <a href="architecture.html" class="nav-link">Architecture</a>
+    <a href="projects.html" class="nav-link">Projects & Tasks</a>
+    <a href="capabilities.html" class="nav-link">Capabilities</a>
+    <a href="skills.html" class="nav-link">Skills</a>
+    <a href="case-study.html" class="nav-link">Case Study</a>
+  </div>
+</div>
+
+<div class="hero">
+  <div class="hero-badge"><span class="pulse"></span> Online & Operational</div>
+  <h1>Meet Barak</h1>
+  <p class="subtitle">A persistent AI agent with a workspace, tools, and memory — built to work alongside the Clarity team every day.</p>
+</div>
+
+<div class="intro-section">
+  <p>Barak isn't a chatbot. He's an <strong>agent</strong> — software that runs 24/7 on its own server, with its own file system, tools, and memory. He can search the web, write code, push to GitHub, run scheduled tasks, and learn your preferences over time. This site explains how he works, what he's doing, and how to get the most out of him.</p>
+</div>
+
+<div class="nav-cards">
+  <a href="architecture.html" class="nav-card">
+    <div class="nav-card-num">01</div>
+    <h3>Architecture & Memory</h3>
+    <p>How Barak is built, why file-based memory is powerful, where it breaks, and the identity files that shape his personality.</p>
+    <span class="arrow">Explore</span>
+  </a>
+  <a href="projects.html" class="nav-card">
+    <div class="nav-card-num">02</div>
+    <h3>Projects & Tasks</h3>
+    <p>Active projects, open tasks, and what needs your input. Your dashboard for tracking work outside Telegram.</p>
+    <span class="arrow">View dashboard</span>
+  </a>
+  <a href="capabilities.html" class="nav-card">
+    <div class="nav-card-num">03</div>
+    <h3>Capabilities & Integrations</h3>
+    <p>Everything Barak can do — built-in tools, connected services, and what's available to connect next.</p>
+    <span class="arrow">See capabilities</span>
+  </a>
+    <a href="skills.html" class="nav-card">
+    <h3>⚡ Skills</h3>
+    <p>What Barak can actually do — the tools and capabilities he operates with</p>
+  </a>
+  <a href="case-study.html" class="nav-card">
+    <div class="nav-card-num">04</div>
+    <h3>Case Study</h3>
+    <p>How this website was built and deployed in ~2 minutes from a chat message — the full step-by-step.</p>
+    <span class="arrow">Read the story</span>
+  </a>
+</div>
+
+<div class="quick-stats">
+  <div class="quick-stat"><div class="stat-val">24/7</div><div class="stat-lbl">Always running</div></div>
+  <div class="quick-stat"><div class="stat-val">Unlimited</div><div class="stat-lbl">Memory capacity</div></div>
+  <div class="quick-stat"><div class="stat-val">6:30a PT</div><div class="stat-lbl">Daily briefing</div></div>
+  <div class="quick-stat"><div class="stat-val">Opus</div><div class="stat-lbl">Model</div></div>
+</div>
+
+<div class="footer">
+  <img class="footer-logo" src="https://cdn.prod.website-files.com/68ca65f64a04c90f13846d37/68ca65f64a04c90f13846dfe_Clarity%20Logo.svg" alt="Clarity">
+  <div class="footer-text">Built by Barak — Powered by Clarity — Last updated <span id="date"></span></div>
+</div>
+<script>
+  function toggleMenu() { document.getElementById('mobileMenu').classList.toggle('show'); }
+  document.addEventListener('click', function(e) {
+    var m = document.getElementById('mobileMenu'), b = document.querySelector('.hamburger');
+    if (m && !m.contains(e.target) && !b.contains(e.target)) m.classList.remove('show');
+  });
+  var d = document.getElementById('date');
+  if (d) d.textContent = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+</script>
+</body>
+</html>
